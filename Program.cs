@@ -1,3 +1,6 @@
+using HotelListing.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
@@ -6,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // setting up the logger
 builder.Logging.AddSerilog();
+
+
+// setup dbContext
+builder.Services.AddDbContext<DatabaseContext>(option=>option.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnectionString")));
 
 // Add services to the container.
 
@@ -36,6 +43,7 @@ Log.Logger = new LoggerConfiguration()
     rollingInterval: RollingInterval.Day,
         restrictedToMinimumLevel: LogEventLevel.Information
     ).CreateLogger();
+
 
 try
 {
