@@ -1,3 +1,4 @@
+using HotelListing.Configurations;
 using HotelListing.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,8 @@ builder.Services.AddCors(o =>
     o.AddPolicy("CorsPolicy", b=> b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
-
+// configure automapper
+builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
