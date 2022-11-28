@@ -14,7 +14,7 @@ namespace HotelListing.Repository
             _dbContext = dbContext;
         }
 
-        public IGenericRepository<Country> Countries => _countryRepository??=new GenericRepository<Country>(_dbContext);
+        public IGenericRepository<Country> Countries => _countryRepository ??= new GenericRepository<Country>(_dbContext);
 
         public IGenericRepository<Hotel> Hotels => _hotelRepository ??= new GenericRepository<Hotel>(_dbContext);
 
@@ -26,7 +26,7 @@ namespace HotelListing.Repository
 
         public async Task Save()
         {
-           await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

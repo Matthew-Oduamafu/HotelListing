@@ -1,7 +1,6 @@
 ﻿using HotelListing.Data;
 using HotelListing.IRepository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 
 namespace HotelListing.Repository
@@ -11,13 +10,11 @@ namespace HotelListing.Repository
         private readonly DatabaseContext _dbConetext;
         private readonly DbSet<T> _db;
 
-
         public GenericRepository(DatabaseContext dbContext)
         {
             _dbConetext = dbContext;
             _db = _dbConetext.Set<T>();
         }
-
 
         public async Task Delete(int id)
         {
@@ -53,13 +50,13 @@ namespace HotelListing.Repository
         {
             IQueryable<T> query = _db;
 
-            if(expression != null)
+            if (expression != null)
             {
-                query= query.Where(expression);
+                query = query.Where(expression);
             }
-            if(orderBy != null)
+            if (orderBy != null)
             {
-                query= orderBy(query); 
+                query = orderBy(query);
             }
 
             if (includes != null)

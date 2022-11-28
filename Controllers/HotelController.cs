@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HotelListing.IRepository;
 using HotelListing.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelListing.Controllers
@@ -13,13 +12,13 @@ namespace HotelListing.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<HotelController> _logger;
         private readonly IMapper _mapper;
+
         public HotelController(IUnitOfWork unitOfWork, ILogger<HotelController> logger, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
         }
-
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,7 +38,6 @@ namespace HotelListing.Controllers
             }
         }
 
-
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,7 +45,7 @@ namespace HotelListing.Controllers
         {
             try
             {
-                var hotel = await _unitOfWork.Hotels.Get(q=>q.Id == id, includes: new List<string> { "Country"});
+                var hotel = await _unitOfWork.Hotels.Get(q => q.Id == id, includes: new List<string> { "Country" });
                 var results = _mapper.Map<HotelDto>(hotel);
                 return Ok(results);
             }

@@ -4,7 +4,7 @@ using HotelListing.Models;
 
 namespace HotelListing.Configurations
 {
-    public class MapperInitializer:Profile
+    public class MapperInitializer : Profile
     {
         public MapperInitializer()
         {

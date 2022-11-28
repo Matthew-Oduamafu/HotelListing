@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HotelListing.IRepository;
 using HotelListing.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelListing.Controllers
@@ -13,6 +12,7 @@ namespace HotelListing.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CountryController> _logger;
         private readonly IMapper _mapper;
+
         public CountryController(IUnitOfWork unitOfWork, ILogger<CountryController> logger, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -23,7 +23,6 @@ namespace HotelListing.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCountries()
         {
-
             try
             {
                 var countries = await _unitOfWork.Countries.GetAll();
@@ -37,16 +36,12 @@ namespace HotelListing.Controllers
             }
         }
 
-
-
-
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetCountry(int id)
         {
-
             try
             {
-                var country = await _unitOfWork.Countries.Get(q=>q.Id==id, includes: new List<string> { "Hotels"});
+                var country = await _unitOfWork.Countries.Get(q => q.Id == id, includes: new List<string> { "Hotels" });
                 var results = _mapper.Map<CountryDto>(country);
                 return Ok(results);
             }

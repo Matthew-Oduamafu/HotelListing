@@ -5,7 +5,7 @@ namespace HotelListing.IRepository
     public interface IGenericRepository<T> where T : class
     {
         Task<T> Get(
-            Expression<Func<T, bool>> expression, 
+            Expression<Func<T, bool>> expression,
             List<string> includes = null
             );
 
@@ -16,10 +16,13 @@ namespace HotelListing.IRepository
             );
 
         Task Insert(T entity);
-        Task InsertRange(IEnumerable<T> entities);
-        void Update(T entity);
-        Task Delete(int id);
-        void DeleteRange(IEnumerable<T> entities);
 
+        Task InsertRange(IEnumerable<T> entities);
+
+        void Update(T entity);
+
+        Task Delete(int id);
+
+        void DeleteRange(IEnumerable<T> entities);
     }
 }
