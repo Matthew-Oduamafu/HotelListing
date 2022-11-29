@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HotelListing.Data;
 using HotelListing.Models;
+using HotelListing.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,16 +17,20 @@ namespace HotelListing.Controllers
         private readonly ILogger<AccountController> _logger;
 
         private readonly IMapper _mapper;
+        private readonly IAuthManager _authmanager;
 
-        public AccountController(UserManager<ApiUser> userManager/*, SignInManager<ApiUser> signInManager*/, ILogger<AccountController> logger, IMapper mapper)
+        public AccountController(UserManager<ApiUser> userManager/*, SignInManager<ApiUser> signInManager*/, ILogger<AccountController> logger, IMapper mapper, IAuthManager authManager)
         {
             _userManager = userManager;
             //_signInManager = signInManager;
             _logger = logger;
             _mapper = mapper;
+            _authmanager = authManager;
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] UserDto userDto)
         {
             _logger.LogInformation($"Registration Attempt for {userDto.Email}");
@@ -49,6 +54,7 @@ namespace HotelListing.Controllers
                     }
                     return BadRequest(ModelState);
                 }
+                await _userManager.AddToRolesAsync(user, userDto.Roles);
 
                 return Accepted();
             }
@@ -59,34 +65,30 @@ namespace HotelListing.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Login([FromBody] LoginUserDto userDto)
-        //{
-        //    _logger.LogInformation($"Login Attempt for {userDto.Email}");
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginUserDto userDto)
+        {
+            _logger.LogInformation($"Login Attempt for {userDto.Email}");
 
-        //    if (ModelState.IsValid == false)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    try
-        //    {
-        //        var result = await _signInManager.PasswordSignInAsync(userName:userDto.Email, password: userDto.Password, isPersistent: false, lockoutOnFailure: false);
+            try
+            {
+                if (await _authmanager.ValidateUser(userDto) == false)
+                {
+                    return Unauthorized();
+                }
 
-        //        if (result.Succeeded == false)
-        //        {
-        //            return Unauthorized(userDto);
-        //        }
-
-        //        return Accepted(userDto);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, $"Something went wrong in the {nameof(Login)}");
-        //        return Problem($"Something went wrong in the {nameof(AccountController)}", statusCode: 500);
-        //    }
-
-        //}
+                return Accepted(new { Token = await _authmanager.CreateToken() });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(Login)}");
+                return Problem($"Something went wrong in the {nameof(AccountController)}", statusCode: 500);
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ builder.Services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(bui
 
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentityServices();
+builder.Services.ConfigureJWT(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
@@ -32,6 +33,7 @@ builder.Services.AddCors(o =>
 // configure automapper
 builder.Services.AddAutoMapper(typeof(MapperInitializer));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -68,9 +70,15 @@ try
 
     app.UseRouting();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers();
+    //app.MapControllers();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
 
     app.Run();
 }
