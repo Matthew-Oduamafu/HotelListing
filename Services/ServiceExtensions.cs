@@ -20,7 +20,7 @@ namespace HotelListing.Services
         {
 
             var jwtSettings = configuration.GetSection("Jwt");
-            var key = Environment.GetEnvironmentVariable("KEY");
+            var key = Environment.GetEnvironmentVariable("MY_API_KEY", EnvironmentVariableTarget.Machine);
 
             services.AddAuthentication(options =>
             {
