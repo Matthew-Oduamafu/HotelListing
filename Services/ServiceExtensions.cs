@@ -18,7 +18,6 @@ namespace HotelListing.Services
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
-
             var jwtSettings = configuration.GetSection("Jwt");
             var key = Environment.GetEnvironmentVariable("MY_API_KEY", EnvironmentVariableTarget.Machine);
 

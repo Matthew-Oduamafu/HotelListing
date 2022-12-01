@@ -8,6 +8,11 @@ namespace HotelListing.Models
         public CountryDto Country { get; set; }
     }
 
+    public class UpdateHotelDto : CreateHotelDto
+    {
+        public int Id { get; set; }
+    }
+
     public class CreateHotelDto
     {
         [Required]
@@ -22,7 +27,7 @@ namespace HotelListing.Models
         [Range(1.0, 5.0)]
         public double Rating { get; set; }
 
-        [Required]
+        //[Required]
         public int CountryId { get; set; }
     }
 }

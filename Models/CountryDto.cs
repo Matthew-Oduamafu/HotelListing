@@ -18,4 +18,9 @@ namespace HotelListing.Models
         [StringLength(maximumLength: 2, ErrorMessage = "Country Short name exceed 2 chars")]
         public string ShortName { get; set; }
     }
+    public class UpdateCountryDto : CreateCountryDto
+    {
+        //public int Id { get; set; }
+        public IList<CreateHotelDto> Hotels { get; set; }
+    }
 }

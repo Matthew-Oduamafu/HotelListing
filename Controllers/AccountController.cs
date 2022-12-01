@@ -2,6 +2,7 @@
 using HotelListing.Data;
 using HotelListing.Models;
 using HotelListing.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,7 @@ namespace HotelListing.Controllers
             _authmanager = authManager;
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
