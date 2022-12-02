@@ -127,7 +127,6 @@ namespace HotelListing.Controllers
             }
         }
 
-
         [Authorize]
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

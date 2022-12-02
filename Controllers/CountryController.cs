@@ -84,7 +84,6 @@ namespace HotelListing.Controllers
             }
         }
 
-
         [Authorize]
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -122,7 +121,6 @@ namespace HotelListing.Controllers
                 return StatusCode(500, "Internal Server Error. Please try again later");
             }
         }
-
 
         [Authorize]
         [HttpDelete("{id:int}")]
