@@ -23,6 +23,7 @@ builder.Services.ConfigureJWT(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+builder.Services.ConfigureVersioning();  // setting up API versioning
 
 // setting up the cors policy
 builder.Services.AddCors(o =>

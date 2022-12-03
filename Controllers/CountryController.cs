@@ -23,6 +23,8 @@ namespace HotelListing.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCountries([FromQuery] RequestParams requestParams)
         {
             // get pagedList
@@ -32,6 +34,8 @@ namespace HotelListing.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetCountry")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCountry(int id)
         {
             var country = await _unitOfWork.Countries.Get(q => q.Id == id, includes: new List<string> { "Hotels" });
