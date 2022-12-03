@@ -60,9 +60,13 @@ try
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        //app.UseSwagger();
+        //app.UseSwaggerUI();
     }
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    // configure custom error handler
+    app.ConfigureExceptionHabdler();
 
     app.UseHttpsRedirection();
 

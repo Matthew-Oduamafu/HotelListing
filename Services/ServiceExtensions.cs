@@ -1,7 +1,10 @@
 ﻿using HotelListing.Data;
+using HotelListing.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 namespace HotelListing.Services
@@ -37,6 +40,29 @@ namespace HotelListing.Services
                     ValidateAudience = false,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
                 };
+            });
+        }
+
+        public static void ConfigureExceptionHabdler(this IApplicationBuilder app)
+        {
+            app.UseExceptionHandler(error =>
+            {
+                error.Run(async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+
+                    if (context != null)
+                    {
+                        Log.Error($"Something went wrong in the {contextFeature.Error}");
+                        await context.Response.WriteAsync(new Error
+                        {
+                            StatusCode = context.Response.StatusCode,
+                            Message = "Internal Server error. Please try again later"
+                        }.ToString());
+                    }
+                });
             });
         }
     }
