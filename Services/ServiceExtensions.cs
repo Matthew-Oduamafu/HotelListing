@@ -98,7 +98,6 @@ namespace HotelListing.Services
             return services;
         }
 
-
         public static void ConfigureRateLimiting(this IServiceCollection services)
         {
             var rateLimitRules = new List<RateLimitRule>
@@ -120,7 +119,6 @@ namespace HotelListing.Services
             services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
             services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-
         }
     }
 }
