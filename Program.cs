@@ -60,7 +60,7 @@ builder.Services.AddSwaggerGen(c =>
 // logger configuration
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File(
-    path: @"E:\Codes\Code-Logs\hotel-listing-log-.txt",
+    path: @"Logs\hotel-listing-log-.txt",
     outputTemplate: "{Timestamp: yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
     rollingInterval: RollingInterval.Day,
         restrictedToMinimumLevel: LogEventLevel.Information
@@ -79,7 +79,11 @@ try
         //app.UseSwaggerUI();
     }
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+        c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Hotel Listing API");
+    });
     // configure custom error handler
     app.ConfigureExceptionHabdler();
 
