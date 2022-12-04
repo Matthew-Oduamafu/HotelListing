@@ -3,6 +3,7 @@ using HotelListing.Data;
 using HotelListing.IRepository;
 using HotelListing.Repository;
 using HotelListing.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -17,12 +18,20 @@ builder.Logging.AddSerilog();
 // setup dbContext
 builder.Services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnectionString")));
 
+builder.Services.AddResponseCaching();  // setting up caching
+builder.Services.ConfigureHttpCacheHeaders();
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentityServices();
 builder.Services.ConfigureJWT(builder.Configuration);
 
 // Add services to the container.
-builder.Services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+builder.Services.AddControllers(config =>
+{
+    config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+    {
+        Duration = 120
+    });
+}).AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 builder.Services.ConfigureVersioning();  // setting up API versioning
 
 // setting up the cors policy
@@ -73,6 +82,8 @@ try
 
     app.UseCors("AllowAll");
 
+    app.UseResponseCaching();  // register middleware
+    app.UseHttpCacheHeaders();  // register caching to middle ware
     app.UseRouting();
 
     app.UseAuthentication();

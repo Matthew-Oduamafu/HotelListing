@@ -2,6 +2,7 @@
 using HotelListing.Data;
 using HotelListing.IRepository;
 using HotelListing.Models;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,10 @@ namespace HotelListing.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //[ResponseCache(CacheProfileName = "120SecondsDuration")] // caching for 60 seconds
+        // add custom cache irrespective of the default cache
+        [HttpCacheExpiration(CacheLocation=CacheLocation.Public, MaxAge =60)]
+        [HttpCacheValidation(MustRevalidate = false)]
         public async Task<IActionResult> GetCountries([FromQuery] RequestParams requestParams)
         {
             // get pagedList
