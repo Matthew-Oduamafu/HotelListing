@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using HotelListing.Configurations;
 using HotelListing.Data;
 using HotelListing.IRepository;
@@ -18,8 +19,12 @@ builder.Logging.AddSerilog();
 // setup dbContext
 builder.Services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnectionString")));
 
+builder.Services.AddMemoryCache();  // set up memory cache for rate limiting
+
 builder.Services.AddResponseCaching();  // setting up caching
 builder.Services.ConfigureHttpCacheHeaders();
+builder.Services.ConfigureRateLimiting();
+
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentityServices();
 builder.Services.ConfigureJWT(builder.Configuration);
@@ -84,6 +89,8 @@ try
 
     app.UseResponseCaching();  // register middleware
     app.UseHttpCacheHeaders();  // register caching to middle ware
+    app.UseIpRateLimiting();  // register rate limiting in middle ware
+
     app.UseRouting();
 
     app.UseAuthentication();

@@ -28,7 +28,7 @@ namespace HotelListing.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[ResponseCache(CacheProfileName = "120SecondsDuration")] // caching for 60 seconds
         // add custom cache irrespective of the default cache
-        [HttpCacheExpiration(CacheLocation=CacheLocation.Public, MaxAge =60)]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 60)]
         [HttpCacheValidation(MustRevalidate = false)]
         public async Task<IActionResult> GetCountries([FromQuery] RequestParams requestParams)
         {

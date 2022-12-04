@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HotelListing.Controllers
 {
     [ApiVersion("2.0")]
-    [ApiVersion("2.0", Deprecated =true)] // indicating deprecated versions
+    [ApiVersion("2.0", Deprecated = true)] // indicating deprecated versions
     // route that can be used
     //[Route("api/[controller]/[action]")] // route 1.
     //[Route("api/country")] // route 2.
